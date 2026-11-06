@@ -1,5 +1,7 @@
 # Hybrid A* for a Tractor with Multiple Trailers
 
+[Download ZIP](https://github.com/libai1943/HybridAStarForTractorTrailerVehicle/archive/refs/heads/main.zip) · [Guide](#file-guide) · [Citation](#references)
+
 **A MATLAB demonstration of search-based maneuver generation for an articulated vehicle.** The example plans for a car-like tractor towing three trailers through a constrained obstacle layout.
 
 As stated in `RunHA.m`, this code accompanies **Chapter 9, “多体拖挂车的决策规划方法,” of the Chinese book 《自动驾驶决策规划技术理论与实践》 (2021)**. It illustrates the sampling-and-search stage. The complete optimization stages of the related papers are not included in this small demonstration.
@@ -48,6 +50,20 @@ Edit poses and obstacle vertices in `LoadCase.m`. The tractor starts at `(−13,
 Edit vehicle geometry and search settings in `InitializeParams.m`. Default hitch offsets are zero (the on-axle arrangement); the file also specifies trailer lengths, steering samples, motion propagation and search limits. Distances are in meters and angles in radians. Keep all body configurations and collision geometry consistent when changing the vehicle.
 
 This finite-resolution search supplies a route-generation example and an initializer for more detailed optimization. It should not be described as the complete optimal-control methods of the papers below.
+
+### Trace the search settings
+
+Start with the default geometry and change one setting at a time. These values are defined together in [InitializeParams.m](InitializeParams.m).
+
+| Setting | Default | What it controls |
+| --- | ---: | --- |
+| `dx`, `dy` | 0.5 m | Spacing of the occupancy grid used to represent obstacles. |
+| `dtheta` | 0.5 rad | Angular bin size for the discretized heading. |
+| `num_phy_ha` | 9 | Number of steering samples configured for Hybrid A*. |
+| `ha_penalty_on_reversing` | 0.05 | Search penalty assigned to reversing. |
+| `max_iter_for_HA` | 416 | Iteration limit for the articulated search. |
+
+To separate setup problems from search behavior, run `LoadCase` followed by `InitializeParams` in the repository directory. Declare `global params` in the command window and inspect `params.basic_map` alongside `params.dialated_map` (spelling as in the code) to see how much clearance the dilation adds. Then run `RunHA` for the complete example.
 
 ## References
 
